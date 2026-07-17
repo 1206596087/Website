@@ -11,11 +11,14 @@ type AccessIdentity = { email: string };
  */
 export async function requireAdminAccess(): Promise<AccessIdentity> {
   const teamDomain = String(env.TEAM_DOMAIN ?? "").replace(/\/$/, "");
-  const audience = String(env.POLICY_AUD ?? "");
+  const audiences = String(env.POLICY_AUD ?? "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
   const adminEmail = String(env.ADMIN_EMAIL ?? "").trim().toLowerCase();
   const token = (await headers()).get("cf-access-jwt-assertion");
 
-  if (!teamDomain || !audience || !adminEmail || !token) {
+  if (!teamDomain || audiences.length === 0 || !adminEmail || !token) {
     throw new Error("Cloudflare Access is not configured.");
   }
 
@@ -24,7 +27,7 @@ export async function requireAdminAccess(): Promise<AccessIdentity> {
   );
   const { payload } = await jwtVerify(token, jwks, {
     issuer: teamDomain,
-    audience,
+    audience: audiences,
   });
   const email = typeof payload.email === "string" ? payload.email.toLowerCase() : "";
 
