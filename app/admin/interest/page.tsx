@@ -1,10 +1,10 @@
-import { requireChatGPTUser } from "@/app/chatgpt-auth";
+import { requireAdminAccess } from "@/app/access-auth";
 import { ensureLibrary } from "@/db/library";
 
 export const dynamic = "force-dynamic";
 
 export default async function InterestPage() {
-  await requireChatGPTUser("/admin/interest");
+  await requireAdminAccess();
   const db = await ensureLibrary();
   const counts = await db.prepare("SELECT event_type, COUNT(*) AS count FROM report_interest_events GROUP BY event_type").all<{ event_type: string; count: number }>();
   const events = await db.prepare("SELECT event_type, feedback, created_at FROM report_interest_events ORDER BY id DESC LIMIT 100").all<{ event_type: string; feedback: string; created_at: string }>();

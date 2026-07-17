@@ -1,4 +1,4 @@
-import { requireChatGPTUser } from "@/app/chatgpt-auth";
+import { requireAdminAccess } from "@/app/access-auth";
 import AdminLibrary from "./studio";
 export const dynamic = "force-dynamic";
-export default async function AdminPage(){await requireChatGPTUser("/admin");return <AdminLibrary/>}
+export default async function AdminPage(){await requireAdminAccess();return <AdminLibrary/>}
