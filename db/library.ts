@@ -9,6 +9,12 @@ const schemaSql = `CREATE TABLE IF NOT EXISTS library_items (
   tone_pattern TEXT NOT NULL DEFAULT '', tags TEXT NOT NULL DEFAULT '', source TEXT NOT NULL DEFAULT '',
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 )`;
+const interestSql = `CREATE TABLE IF NOT EXISTS report_interest_events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  event_type TEXT NOT NULL,
+  feedback TEXT NOT NULL DEFAULT '',
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+)`;
 
 const starterRows = [
   ["surname","\u65bd","Shi","","","","A classical surname associated with generosity and quiet refinement.","","","first tone","kindness,refinement","Mingzi starter library"],
@@ -26,6 +32,7 @@ export async function ensureLibrary() {
   const db = env.DB;
   if (!db) throw new Error("The content library is not available yet.");
   await db.prepare(schemaSql).run();
+  await db.prepare(interestSql).run();
   const count = await db.prepare("SELECT COUNT(*) AS count FROM library_items").first<{ count: number }>();
   if ((count?.count ?? 0) === 0) {
     await db.batch(starterRows.map((row) => db.prepare("INSERT INTO library_items (kind, hanzi, romanization, title, author, era, body, translation, meaning, tone_pattern, tags, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").bind(...row)));
