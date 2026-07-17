@@ -1,85 +1,25 @@
 "use client";
 
-import { useMemo, useState } from "react";
-
-type Name = {
-  hanzi: string;
-  pinyin: string;
-  meaning: string;
-  note: string;
-  origin: string;
-  element: string;
-  mood: "Poetic" | "Modern" | "Serene";
-};
-
-const names: Name[] = [
-  { hanzi: "知远", pinyin: "Zhīyuǎn", meaning: "To see beyond what is near.", note: "A calm, far-seeing name with an open horizon.", origin: "Inspired by the classical idea of quiet purpose and clear sight.", element: "Wood · Water", mood: "Poetic" },
-  { hanzi: "清晏", pinyin: "Qīngyàn", meaning: "Clear skies and peaceful days.", note: "Graceful and composed, with a feeling of lasting ease.", origin: "A literary phrase for a world at peace, often found in classical prose.", element: "Water · Earth", mood: "Poetic" },
-  { hanzi: "予安", pinyin: "Yǔ'ān", meaning: "To give peace.", note: "A soft, contemporary name that feels generous and grounded.", origin: "Built from two enduring Chinese ideas: offering and serenity.", element: "Earth · Wood", mood: "Modern" },
-  { hanzi: "明澈", pinyin: "Míngchè", meaning: "Bright and transparent.", note: "For a spirit that values clarity, warmth, and honesty.", origin: "Echoes the imagery of clear water and an illuminated mind.", element: "Fire · Water", mood: "Modern" },
-  { hanzi: "宁初", pinyin: "Níngchū", meaning: "The peace of a beginning.", note: "Gentle, minimal, and quietly full of promise.", origin: "A name shaped around the stillness found at the start of a new chapter.", element: "Earth · Wood", mood: "Serene" },
-  { hanzi: "书涵", pinyin: "Shūhán", meaning: "Learning held with depth.", note: "A thoughtful name with scholarship and inner poise.", origin: "Draws on the Chinese literary tradition of learning as a lifelong refuge.", element: "Wood · Water", mood: "Serene" },
-];
-
-export default function Home() {
-  const [surname, setSurname] = useState("");
-  const [style, setStyle] = useState<Name["mood"]>("Poetic");
-  const [result, setResult] = useState<Name | null>(null);
-  const [saved, setSaved] = useState(false);
-
-  const choices = useMemo(() => names.filter((name) => name.mood === style), [style]);
-  const makeName = () => {
-    const pick = choices[Math.floor(Math.random() * choices.length)];
-    setResult(pick);
-    setSaved(false);
-  };
-
-  return (
-    <main>
-      <nav className="nav">
-        <a className="brand" href="#top" aria-label="Mingzi home">MÍNGZI<span>名</span></a>
-        <div className="nav-links"><a href="#how">How it works</a><a href="#philosophy">Our approach</a></div>
-        <button className="language" type="button" aria-label="Language">EN <i>⌄</i></button>
-      </nav>
-
-      <section className="hero" id="top">
-        <div className="hero-copy">
-          <p className="eyebrow">A name, considered</p>
-          <h1>Find a Chinese name<br />with <em>meaning.</em></h1>
-          <p className="intro">A thoughtful introduction to Chinese naming—shaped by sound, character, and centuries of cultural imagination.</p>
-          <a className="text-link" href="#create">Create your name <span>↓</span></a>
-        </div>
-        <div className="seal-wrap" aria-hidden="true">
-          <div className="seal-shadow"></div><div className="seal"><span>名</span><small>míng</small></div>
-          <p>Every name<br />begins with a story.</p>
-        </div>
-      </section>
-
-      <section className="maker" id="create">
-        <div className="section-label">01 — Name atelier</div>
-        <div className="maker-grid">
-          <div><h2>Let’s find<br />your name.</h2><p>Choose a feeling. We’ll pair it with a name that sounds natural and carries a story worth sharing.</p></div>
-          <div className="form-card">
-            <label>Your family name <span>optional</span><input value={surname} onChange={(e) => setSurname(e.target.value)} placeholder="e.g. Smith" /></label>
-            <fieldset><legend>What speaks to you?</legend><div className="style-pills">{(["Poetic", "Modern", "Serene"] as const).map((item) => <button key={item} className={style === item ? "active" : ""} onClick={() => setStyle(item)} type="button">{item}</button>)}</div></fieldset>
-            <button className="generate" type="button" onClick={makeName}>Find my Chinese name <span>→</span></button>
-          </div>
-        </div>
-      </section>
-
-      {result && <section className="result" aria-live="polite">
-        <div className="result-top"><p className="eyebrow">Your name is</p><button className="quiet-button" type="button" onClick={makeName}>Try another <span>↻</span></button></div>
-        <div className="result-grid">
-          <div className="name-art"><div className="brush-ring"></div><p>{surname ? `${surname} · ` : ""}{result.pinyin}</p><strong>{result.hanzi}</strong><small>{result.element}</small></div>
-          <div className="reading"><h2>{result.pinyin}</h2><h3>“{result.meaning}”</h3><p>{result.note}</p><div className="origin"><span>THE STORY</span><p>{result.origin}</p></div><button className={saved ? "save saved" : "save"} onClick={() => setSaved(!saved)} type="button">{saved ? "Saved to your collection" : "Save this name"} <span>{saved ? "✓" : "+"}</span></button></div>
-        </div>
-        <p className="disclaimer">MÍNGZI offers cultural and linguistic inspiration for personal exploration. It does not provide medical, legal, financial, or life-decision advice.</p>
-      </section>}
-
-      <section className="principles" id="philosophy"><div className="section-label">02 — The art of naming</div><div className="principle-grid"><article><b>声</b><h3>Sound</h3><p>A name should be natural to say, memorable to hear, and gentle on the tongue.</p></article><article><b>形</b><h3>Character</h3><p>Each character is selected for its shape, nuance, and place in everyday Chinese.</p></article><article><b>意</b><h3>Meaning</h3><p>We look beyond translation to the image, history, and feeling held in a name.</p></article></div></section>
-
-      <section className="quote" id="how"><p>“The beginning of wisdom<br />is to call things by their<br /><em>right names.</em>”</p><span>— AN OLD IDEA, MADE PERSONAL</span></section>
-      <footer><a className="brand" href="#top">MÍNGZI<span>名</span></a><p>Chinese names, thoughtfully made.</p><span>© 2026 MÍNGZI</span></footer>
-    </main>
-  );
-}
+import { useState } from "react";
+type Mood = "Poetic" | "Modern" | "Serene";
+type Surname = { id:string; hanzi:string; pinyin:string; tone:string; story:string; poem:string; translation:string; sound:string; keys:string[] };
+type Given = { hanzi:string; pinyin:string; tones:string; meaning:string; note:string; origin:string; mood:Mood; worksWith:string[] };
+const surnames:Surname[]=[
+{id:"shi",hanzi:"\u65bd",pinyin:"Sh\u012b",tone:"first tone",story:"Shi is an old Chinese surname associated with generosity and quiet refinement. Its character carries the idea of offering kindness.",poem:"\u968f\u98ce\u6f5c\u5165\u591c\uff0c\u6da6\u7269\u7ec6\u65e0\u58f0\u3002",translation:"It steals in with the night wind, nourishing all things without a sound.",sound:"A clear, level opening gives the full name a composed first step.",keys:["s","sh"]},
+{id:"gu",hanzi:"\u987e",pinyin:"G\u00f9",tone:"fourth tone",story:"Gu is a classical surname with a poised, literary character. It suggests care, attention, and a thoughtful turning of the mind.",poem:"\u6c5f\u6c34\u6d41\u6625\u53bb\u6b32\u5c3d\uff0c\u6c5f\u6f6d\u843d\u6708\u590d\u897f\u659c\u3002",translation:"River waters carry spring away; the moon above the river bends again to the west.",sound:"A decisive falling opening creates a vivid contrast with the given name.",keys:["g","c"]},
+{id:"meng",hanzi:"\u5b5f",pinyin:"M\u00e8ng",tone:"fourth tone",story:"Meng is an ancient surname connected with beginning and seniority. It feels scholarly, rooted, and quietly assured.",poem:"\u5b64\u821f\u84d1\u7b20\u7fc1\uff0c\u72ec\u9493\u5bd2\u6c5f\u96ea\u3002",translation:"An old man in a lone boat, fishing by himself in the cold river snow.",sound:"The falling surname gives the following two syllables room to unfold.",keys:["m"]},
+{id:"lin",hanzi:"\u6797",pinyin:"L\u00edn",tone:"second tone",story:"Lin means forest. It carries an image of growth, shelter, and many lives standing together.",poem:"\u7a7a\u5c71\u65b0\u96e8\u540e\uff0c\u5929\u6c14\u665a\u6765\u79cb\u3002",translation:"After fresh rain on an empty mountain, evening brings the air of autumn.",sound:"The rising opening gives the name a gentle lift before it settles.",keys:["l","r"]}];
+const names:Given[]=[
+{hanzi:"\u5b81\u521d",pinyin:"N\u00edngch\u016b",tones:"2 · 1",meaning:"The peace of a beginning.",note:"Gentle, minimal, and quietly full of promise.",origin:"Built around the stillness found at the start of a new chapter.",mood:"Poetic",worksWith:["shi","meng"]},
+{hanzi:"\u77e5\u8fdc",pinyin:"Zh\u012byu\u01cen",tones:"1 · 3",meaning:"To see beyond what is near.",note:"A calm, far-seeing name with an open horizon.",origin:"Inspired by the classical idea of quiet purpose and clear sight.",mood:"Poetic",worksWith:["gu","lin"]},
+{hanzi:"\u660e\u6f88",pinyin:"M\u00edngch\u00e8",tones:"2 · 4",meaning:"Bright and transparent.",note:"For a spirit that values clarity, warmth, and honesty.",origin:"Echoes the imagery of clear water and an illuminated mind.",mood:"Modern",worksWith:["shi","meng"]},
+{hanzi:"\u4e88\u5b89",pinyin:"Y\u01d4'\u0101n",tones:"3 · 1",meaning:"To give peace.",note:"A soft, contemporary name that feels generous and grounded.",origin:"Built from two enduring Chinese ideas: offering and serenity.",mood:"Modern",worksWith:["gu","lin"]},
+{hanzi:"\u4e66\u6db5",pinyin:"Sh\u016bh\u00e1n",tones:"1 · 2",meaning:"Learning held with depth.",note:"A thoughtful name with scholarship and inner poise.",origin:"Draws on the Chinese literary tradition of learning as a lifelong refuge.",mood:"Serene",worksWith:["shi","lin"]},
+{hanzi:"\u6e05\u664f",pinyin:"Q\u012bngy\u00e0n",tones:"1 · 4",meaning:"Clear skies and peaceful days.",note:"Graceful and composed, with a feeling of lasting ease.",origin:"A literary phrase for a world at peace.",mood:"Serene",worksWith:["gu","meng"]}];
+export default function Home(){const[familyName,setFamilyName]=useState("");const[style,setStyle]=useState<Mood>("Poetic");const[surname,setSurname]=useState<Surname|null>(null);const[given,setGiven]=useState<Given|null>(null);const[saved,setSaved]=useState(false);const make=()=>{const input=familyName.trim().toLowerCase();const s=surnames.find(x=>x.keys.some(k=>input.startsWith(k)))??surnames[Math.floor(Math.random()*surnames.length)];const g=names.find(x=>x.mood===style&&x.worksWith.includes(s.id))??names.find(x=>x.worksWith.includes(s.id))??names[0];setSurname(s);setGiven(g);setSaved(false)};const full=surname&&given?`${surname.hanzi}${given.hanzi}`:"";const roman=surname&&given?`${surname.pinyin} ${given.pinyin}`:"";return <main>
+<nav className="nav"><a className="brand" href="#top">MÍNGZI<span>{"\u540d"}</span></a><div className="nav-links"><a href="#how">How it works</a><a href="#philosophy">Our approach</a></div><button className="language" type="button">EN <i>⌄</i></button></nav>
+<section className="hero" id="top"><div className="hero-copy"><p className="eyebrow">A name, considered</p><h1>Find a Chinese name<br/>with <em>meaning.</em></h1><p className="intro">A thoughtful introduction to Chinese naming—shaped by sound, character, and centuries of cultural imagination.</p><a className="text-link" href="#create">Create your name <span>↓</span></a></div><div className="seal-wrap"><div className="seal-shadow"/><div className="seal"><span>{"\u540d"}</span><small>míng</small></div><p>Every name<br/>begins with a story.</p></div></section>
+<section className="maker" id="create"><div className="section-label">01 — Name atelier</div><div className="maker-grid"><div><h2>Begin with<br/>your surname.</h2><p>In Chinese, the family name comes first. We begin there, then select a given name with a natural tonal rhythm and a shared cultural story.</p></div><div className="form-card"><label>Your family name <span>optional</span><input value={familyName} onChange={e=>setFamilyName(e.target.value)} placeholder="e.g. Smith"/></label><fieldset><legend>What speaks to you?</legend><div className="style-pills">{(["Poetic","Modern","Serene"]as const).map(x=><button key={x} className={style===x?"active":""} onClick={()=>setStyle(x)} type="button">{x}</button>)}</div></fieldset><button className="generate" type="button" onClick={make}>Match my Chinese name <span>→</span></button></div></div></section>
+{surname&&given&&<section className="result"><div className="result-top"><p className="eyebrow">Your complete Chinese name</p><button className="quiet-button" onClick={make} type="button">Try another <span>↻</span></button></div><div className="result-grid"><div className="name-art"><div className="brush-ring"/><p>{roman}</p><strong>{full}</strong><small>{surname.tone} · {given.tones}</small></div><div className="reading"><h2>{roman}</h2><h3>“{given.meaning}”</h3><p>{given.note}</p><div className="origin"><span>NAME STORY</span><p>{given.origin}</p></div><button className={saved?"save saved":"save"} onClick={()=>setSaved(!saved)} type="button">{saved?"Saved to your collection":"Save this name"} <span>{saved?"✓":"+"}</span></button></div></div><div className="surname-story"><div><p className="eyebrow">Surname — {surname.hanzi} · {surname.pinyin}</p><h3>The story of {surname.pinyin}.</h3><p>{surname.story}</p><div className="rhythm"><span>THE RHYTHM</span><p>{surname.sound} <b>{surname.pinyin} {given.pinyin}</b> follows a {surname.tone} → {given.tones} tonal path.</p></div></div><blockquote><span>CLASSICAL ECHO</span><p>{surname.poem}</p><cite>{surname.translation}</cite></blockquote></div><p className="disclaimer">MÍNGZI offers cultural and linguistic inspiration for personal exploration. It does not provide medical, legal, financial, or life-decision advice.</p></section>}
+<section className="principles" id="philosophy"><div className="section-label">02 — The art of naming</div><div className="principle-grid"><article><b>{"\u58f0"}</b><h3>Sound</h3><p>A surname leads. The given name follows with a rhythm that feels balanced and natural.</p></article><article><b>{"\u5f62"}</b><h3>Character</h3><p>Each character is selected for its shape, nuance, and place in everyday Chinese.</p></article><article><b>{"\u610f"}</b><h3>Meaning</h3><p>We look beyond translation to the image, history, and feeling held in a name.</p></article></div></section>
+<section className="quote" id="how"><p>“The beginning of wisdom<br/>is to call things by their<br/><em>right names.</em>”</p><span>— AN OLD IDEA, MADE PERSONAL</span></section><footer><a className="brand" href="#top">MÍNGZI<span>{"\u540d"}</span></a><p>Chinese names, thoughtfully made.</p><span>© 2026 MÍNGZI</span></footer></main>}
