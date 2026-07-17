@@ -5,6 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "MINGZI - Find a Chinese name with meaning",
   description: "Thoughtful Chinese names shaped by sound, character, and cultural meaning.",
+  verification: { google: "8LOfGaOI8t1sn2XG-wG6ML80cK4mTbViW-r5DfW6ba8" },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
 };
 
