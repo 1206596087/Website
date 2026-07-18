@@ -5,7 +5,9 @@ import { defineConfig } from "vite";
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
 const localBindingConfig = {
-  name: "mingzi-name-atelier",
+  // This must match the Worker whose workers.dev URL and Access policies are
+  // used in Cloudflare: website.1206596087.workers.dev.
+  name: "website",
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
   d1_databases: [
