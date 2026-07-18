@@ -35,7 +35,7 @@ export async function ensureLibrary() {
   await db.prepare(interestSql).run();
   const count = await db.prepare("SELECT COUNT(*) AS count FROM library_items").first<{ count: number }>();
   if ((count?.count ?? 0) === 0) {
-    await db.batch(starterRows.map((row) => db.prepare("INSERT INTO library_items (kind, hanzi, romanization, title, author, era, body, translation, meaning, tone_pattern, tags, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").bind(...row)));
+    await db.batch(starterRows.map((row) => db.prepare("INSERT INTO library_items (kind, hanzi, romanization, title, author, era, body, translation, meaning, tone_pattern, tags, source) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").bind(...row, ...Array(Math.max(0, 12 - row.length)).fill(""))));
   }
   return db;
 }
