@@ -1,6 +1,5 @@
 import { env } from "cloudflare:workers";
 import { headers } from "next/headers";
-import { createRemoteJWKSet, jwtVerify } from "jose";
 
 type AccessIdentity = { email: string };
 
@@ -22,6 +21,9 @@ export async function requireAdminAccess(): Promise<AccessIdentity> {
     throw new Error("Cloudflare Access is not configured.");
   }
 
+  // Load the JWT implementation only for protected requests. The public name
+  // generator must remain independent from the private administration stack.
+  const { createRemoteJWKSet, jwtVerify } = await import("jose");
   const jwks = createRemoteJWKSet(
     new URL(`${teamDomain}/cdn-cgi/access/certs`),
   );
