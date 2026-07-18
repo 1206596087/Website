@@ -3,7 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://website.1206596087.workers.dev"),
+  metadataBase: new URL("https://nameapp.uk"),
   title: "MINGZI - Find a Chinese name with meaning",
   description: "Thoughtful Chinese names shaped by sound, character, and cultural meaning.",
   keywords: ["Chinese name generator", "Chinese name", "learn Chinese", "Chinese culture", "Chinese surname"],
@@ -25,6 +25,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const structuredData = { "@context": "https://schema.org", "@type": "WebSite", name: "MINGZI", url: "https://website.1206596087.workers.dev", description: "A cultural and linguistic Chinese name atelier." };
+  const structuredData = { "@context": "https://schema.org", "@type": "WebSite", name: "MINGZI", url: "https://nameapp.uk", description: "A cultural and linguistic Chinese name atelier." };
   return <html lang="en"><body>{children}<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} /><Script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"d29693c54fe14e2e9501be161500e650"}' strategy="afterInteractive" /></body></html>;
 }
